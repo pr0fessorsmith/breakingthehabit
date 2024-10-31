@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Dict
 
 class Habit:
     def __init__(self, name: str, frequency: str):
@@ -61,3 +61,29 @@ class Habit:
                    (date2.year == date1.year + 1 and date2.month == 1 and date1.month == 12)
         else:
             raise ValueError("Unsupported frequency. Use 'daily', 'weekly', or 'monthly'.")
+
+    def to_dict(self) -> Dict:
+        """
+        Convert the habit to a dictionary.
+
+        :return: A dictionary representation of the habit.
+        """
+        return {
+            'name': self.name,
+            'frequency': self.frequency,
+            'creation_date': self.creation_date.isoformat(),
+            'completion_dates': [date.isoformat() for date in self.completion_dates]
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict) -> 'Habit':
+        """
+        Create a habit from a dictionary.
+
+        :param data: A dictionary representation of the habit.
+        :return: A Habit object.
+        """
+        habit = cls(name=data['name'], frequency=data['frequency'])
+        habit.creation_date = datetime.fromisoformat(data['creation_date'])
+        habit.completion_dates = [datetime.fromisoformat(date) for date in data['completion_dates']]
+        return habit
