@@ -42,5 +42,27 @@ class TestHabit(unittest.TestCase):
         habit.completion_dates = [datetime(2023, 1, 1)]
         self.assertEqual(habit.get_longest_streak(), 1)
 
+    def test_to_dict(self):
+        habit = Habit(name="Exercise", frequency="daily")
+        habit.complete_task()
+        habit_dict = habit.to_dict()
+        self.assertEqual(habit_dict['name'], "Exercise")
+        self.assertEqual(habit_dict['frequency'], "daily")
+        self.assertIn('creation_date', habit_dict)
+        self.assertIn('completion_dates', habit_dict)
+
+    def test_from_dict(self):
+        habit_dict = {
+            'name': "Exercise",
+            'frequency': "daily",
+            'creation_date': datetime(2023, 1, 1).isoformat(),
+            'completion_dates': [datetime(2023, 1, 2).isoformat()]
+        }
+        habit = Habit.from_dict(habit_dict)
+        self.assertEqual(habit.name, "Exercise")
+        self.assertEqual(habit.frequency, "daily")
+        self.assertEqual(habit.creation_date, datetime(2023, 1, 1))
+        self.assertEqual(habit.completion_dates, [datetime(2023, 1, 2)])
+
 if __name__ == '__main__':
     unittest.main()

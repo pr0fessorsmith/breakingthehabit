@@ -23,7 +23,7 @@ class TestReminder(unittest.TestCase):
         self.reminder.send_email_reminder(self.habit1)
 
         mock_smtp.assert_called_once_with('smtp.gmail.com', 465)
-        mock_server.login.assert_called_once_with('your_email@gmail.com', 'your_password')
+        mock_server.login.assert_called_once_with(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
         mock_server.sendmail.assert_called_once()
 
     @patch('requests.post')
