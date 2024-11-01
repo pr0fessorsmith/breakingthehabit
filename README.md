@@ -19,9 +19,7 @@
 
 1. CLI commands:
    * Create a habit:
-
    python cli.py create-habit <name> <frequency>
-   
    example:
    python cli.py create-habit Exercise daily
 
