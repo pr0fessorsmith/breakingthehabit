@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from src.habit import Habit
+from src.user import User
 
 def get_all_habits():
     habits = Habit.load_all()
@@ -18,6 +19,16 @@ def get_longest_streak(habit_name):
 def get_longest_streak_all():
     habits = Habit.load_all()
     streaks = {habit.name: calculate_streak(habit.completion_dates, habit.frequency) for habit in habits}
+    return max(streaks, key=streaks.get)
+
+def get_user_longest_streak(user: User, habit_name: str) -> int:
+    habit = user.get_habit_by_name(habit_name)
+    if habit:
+        return calculate_streak(habit.completion_dates, habit.frequency)
+    return 0
+
+def get_user_longest_streak_all(user: User) -> str:
+    streaks = {habit.name: calculate_streak(habit.completion_dates, habit.frequency) for habit in user.get_habits()}
     return max(streaks, key=streaks.get)
 
 def calculate_streak(completion_dates, frequency):
