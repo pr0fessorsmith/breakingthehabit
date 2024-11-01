@@ -1,6 +1,7 @@
 import os
 import smtplib
 import requests
+import json
 from email.mime.text import MIMEText
 from typing import List
 from src.user import User
@@ -14,6 +15,10 @@ class Reminder:
         :param user: The user to send reminders to.
         """
         self.user = user
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+        self.email_user = config['email_user']
+        self.email_pass = config['email_pass']
 
     def send_email_reminder(self, habit: Habit) -> None:
         """
@@ -25,14 +30,14 @@ class Reminder:
         body = f"Don't forget to complete your habit: {habit.name} ({habit.frequency})"
         msg = MIMEText(body)
         msg['Subject'] = subject
-        msg['From'] = os.getenv('EMAIL_USER')
+        msg['From'] = self.email_user
         msg['To'] = self.user.email
 
         # Email sending logic using Gmail's SMTP server
         try:
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-                server.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
-                server.sendmail(os.getenv('EMAIL_USER'), [self.user.email], msg.as_string())
+                server.login(self.email_user, self.email_pass)
+                server.sendmail(self.email_user, [self.user.email], msg.as_string())
             print(f"Email reminder sent to {self.user.email} for habit '{habit.name}'")
         except Exception as e:
             print(f"Failed to send email reminder: {e}")

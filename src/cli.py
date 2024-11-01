@@ -1,6 +1,7 @@
 import click
 from src.user import User
 from src.habit import Habit
+from src.analytics import get_longest_streak, get_longest_streak_all
 
 # Define the path to the JSON file
 USER_DATA_FILE = 'user_data.json'
@@ -58,6 +59,25 @@ def complete_task(name):
         habit.complete_task()
         user.save_to_json(USER_DATA_FILE)
         click.echo(f"Habit '{name}' marked as completed.")
+    except ValueError as e:
+        click.echo(str(e))
+
+@cli.command()
+@click.argument('name')
+def longest_streak(name):
+    """Get the longest streak for a specific habit."""
+    try:
+        streak = get_longest_streak(name)
+        click.echo(f"The longest streak for habit '{name}' is {streak} days.")
+    except ValueError as e:
+        click.echo(str(e))
+
+@cli.command()
+def longest_streak_all():
+    """Get the habit with the longest streak among all habits."""
+    try:
+        habit_name = get_longest_streak_all()
+        click.echo(f"The habit with the longest streak is '{habit_name}'.")
     except ValueError as e:
         click.echo(str(e))
 
