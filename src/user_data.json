@@ -1,0 +1,14 @@
+{
+    "username": "cli_user",
+    "email": "cli_user@example.com",
+    "habits": [
+        {
+            "name": "drinkwater",
+            "frequency": "daily",
+            "creation_date": "2024-11-01T18:19:20.676348",
+            "completion_dates": [
+                "2024-11-01T18:20:34.053243"
+            ]
+        }
+    ]
+}
